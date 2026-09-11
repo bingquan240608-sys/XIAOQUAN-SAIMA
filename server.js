@@ -8,7 +8,7 @@ const sessions=new Map();
 
 function hash(p,s=crypto.randomBytes(16).toString("hex")){return {s,h:crypto.scryptSync(p,s,64).toString("hex")}}
 function verify(p,x){try{return crypto.timingSafeEqual(Buffer.from(x.h,"hex"),crypto.scryptSync(p,x.s,64))}catch{return false}}
-function load(){if(!fs.existsSync(DATA)){let users={};for(let i=1;i<=999;i++){let q=hash("789789");users["XIAOQUANSAIMA"+i]={password:q,balance:100,totalBet:0,totalReturn:0,totalLoss:0,history:[]}}let d={users,logs:[]};fs.writeFileSync(DATA,JSON.stringify(d,null,2));return d}return JSON.parse(fs.readFileSync(DATA,"utf8"))}
+function load(){if(!fs.existsSync(DATA)){let users={};for(let i=1;i<=999;i++){let q=hash("789789");users["XIAOQUANSAIMA"+i]={password:q,balance:0,totalBet:0,totalReturn:0,totalLoss:0,history:[]}}let d={users,logs:[]};fs.writeFileSync(DATA,JSON.stringify(d,null,2));return d}return JSON.parse(fs.readFileSync(DATA,"utf8"))}
 function save(d){fs.writeFileSync(DATA,JSON.stringify(d,null,2))}
 let db=load();
 function body(req){return new Promise((res,rej)=>{let b="";req.on("data",c=>b+=c);req.on("end",()=>{try{res(b?JSON.parse(b):{})}catch{rej(new Error("JSON错误"))}})})}
